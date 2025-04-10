@@ -1,0 +1,85 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+
+require:
+  - rubocop-minitest
+  - rubocop-rake
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'exe/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+    - 'lib/**/*.rb'
+    - 'exe/**/*'
+
+Metrics/MethodLength:
+  Max: 250
+
+Metrics/AbcSize:
+  Max: 160
+
+Metrics/CyclomaticComplexity:
+  Max: 50
+
+Metrics/PerceivedComplexity:
+  Max: 50
+
+Metrics/ModuleLength:
+  Max: 250
+
+Metrics/BlockNesting:
+  Max: 5
+
+Metrics/ClassLength:
+  Max: 150
+
+Naming/FileName:
+  Exclude:
+    - 'lib/lzstring.rb'
+    - 'lib/lzstring/*.rb'
+    - 'test/lzstring_test.rb'
+
+Style/Documentation:
+  Enabled: true
+  Exclude:
+    - 'lib/lzstring/*.rb'
+    - 'test/**/*'
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
+
+Naming/MethodName:
+  Enabled: false
+
+Naming/VariableName:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Minitest/MultipleAssertions:
+  Max: 5

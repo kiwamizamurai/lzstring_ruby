@@ -1,0 +1,8 @@
+--markup markdown
+--protected
+--private
+--embed-mixin ClassMethods
+--title "LZString Ruby Documentation"
+-
+README.md
+LICENSE.txt 

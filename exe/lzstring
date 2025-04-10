@@ -1,0 +1,196 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "lzstring"
+require "optparse"
+
+# Command line options
+options = {
+  decompress: false,
+  encoder: "raw",
+  output: nil,
+  quiet: false,
+  verify: true,
+  legacy: false
+}
+
+# Parse command line arguments
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: lzstring [options] [input-file]\n\nUse lz-string to compress or decompress a file"
+  opts.separator ""
+  opts.separator "Arguments:"
+  opts.separator "  input-file                  file to process, if no file then read from stdin"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-V", "--version", "output the version number") do
+    puts "lzstring version #{LZString::VERSION}"
+    exit
+  end
+
+  opts.on("-d", "--decompress", "if unset then this will compress") do
+    options[:decompress] = true
+  end
+
+  opts.on("-e", "--encoder TYPE", %w[base64 encodeduri raw uint8array utf16],
+          "character encoding to use (choices: \"base64\", \"encodeduri\", \"raw\", \"uint8array\", \"utf16\", default: \"raw\")") do |encoder|
+    options[:encoder] = encoder
+  end
+
+  opts.on("-o", "--output OUTPUT_FILE", "output file, otherwise write to stdout") do |output|
+    options[:output] = output
+  end
+
+  opts.on("-q", "--quiet", "don't print any error messages") do
+    options[:quiet] = true
+  end
+
+  opts.on("--no-verify", "disable verification of compression/decompression") do
+    options[:verify] = false
+  end
+
+  opts.on("--legacy", "use legacy mode where uint8array decompression must be an even length") do
+    options[:legacy] = true
+  end
+
+  opts.on("-h", "--help", "display help for command") do
+    puts opts
+    exit
+  end
+end
+
+begin
+  opt_parser.parse!
+
+  # Determine input source (file or stdin)
+  input_file = ARGV[0]
+
+  # Load input content
+  content = if input_file.nil?
+              $stdin.binmode.read
+            else
+              unless File.exist?(input_file)
+                warn "Error: Unable to find #{input_file}" unless options[:quiet]
+                exit 1
+              end
+
+              begin
+                File.binread(input_file)
+              rescue
+                warn "Error: Unable to read #{input_file}" unless options[:quiet]
+                exit 1
+              end
+            end
+
+  # Process content based on options
+  result = if options[:decompress]
+             case options[:encoder]
+             when "base64"
+               LZString.decompress_from_base64(content)
+             when "encodeduri"
+               LZString.decompress_from_encoded_uri_component(content)
+             when "utf16"
+               LZString.decompress_from_utf16(content)
+             when "uint8array"
+               # Process uint8array with legacy mode if specified
+               if options[:legacy] && content.length.odd?
+                 warn "Error: Uint8Array input must be even length in legacy mode" unless options[:quiet]
+                 exit 1
+               end
+               LZString.decompress_from_uint8_array(content.bytes)
+             else # raw
+               LZString.decompress(content)
+             end
+           else
+             case options[:encoder]
+             when "base64"
+               LZString.compress_to_base64(content)
+             when "encodeduri"
+               LZString.compress_to_encoded_uri_component(content)
+             when "utf16"
+               LZString.compress_to_utf16(content)
+             when "uint8array"
+               LZString.compress_to_uint8_array(content).pack("C*")
+             else # raw
+               LZString.compress(content)
+             end
+           end
+
+  if result.nil?
+    warn "Error: Unable to process content" unless options[:quiet]
+    exit 1
+  end
+
+  # Verify the result if verification is enabled
+  if options[:verify]
+    validated = if options[:decompress]
+                  # If we decompressed, then compress the result for verification
+                  case options[:encoder]
+                  when "base64"
+                    LZString.compress_to_base64(result)
+                  when "encodeduri"
+                    LZString.compress_to_encoded_uri_component(result)
+                  when "utf16"
+                    LZString.compress_to_utf16(result)
+                  when "uint8array"
+                    LZString.compress_to_uint8_array(result).pack("C*")
+                  else # raw
+                    LZString.compress(result)
+                  end
+                else
+                  # If we compressed, then decompress the result for verification
+                  case options[:encoder]
+                  when "base64"
+                    LZString.decompress_from_base64(result)
+                  when "encodeduri"
+                    LZString.decompress_from_encoded_uri_component(result)
+                  when "utf16"
+                    LZString.decompress_from_utf16(result)
+                  when "uint8array"
+                    if options[:legacy] && result.length.odd?
+                      nil # Skip validation if legacy mode and odd length
+                    else
+                      LZString.decompress_from_uint8_array(result.bytes)
+                    end
+                  else # raw
+                    LZString.decompress(result)
+                  end
+                end
+
+    valid = !validated.nil? && content.length == validated.length
+
+    if valid
+      # Compare bytes
+      content.bytes.each_with_index do |b, i|
+        if b != validated.bytes[i]
+          valid = false
+          break
+        end
+      end
+    end
+
+    unless valid
+      warn "Error: Unable to validate content" unless options[:quiet]
+      exit 1
+    end
+  end
+
+  # Output the result
+  if options[:output]
+    begin
+      File.binwrite(options[:output], result)
+    rescue
+      warn "Error: Unable to write to #{options[:output]}" unless options[:quiet]
+      exit 1
+    end
+  else
+    $stdout.binmode.write(result)
+  end
+rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+  warn "Error: Invalid option" unless options[:quiet]
+  warn opt_parser unless options[:quiet]
+  exit 1
+rescue => e
+  warn "Error: #{e.message}" unless options[:quiet]
+  exit 1
+end
