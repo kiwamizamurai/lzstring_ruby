@@ -5,7 +5,7 @@
 [![Coverage Status](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/kiwamizamurai/lzstring-ruby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Ruby implementation of lz-string, a string compression algorithm designed for client-side web applications.
+A Ruby port of lz-string - a string compression algorithm with support for multiple encodings (base64, URI, UTF16) and seamless JavaScript interoperability
 
 ## Installation
 
@@ -197,17 +197,6 @@ Run all quality checks:
 
 ```bash
 $ bundle exec rake quality
-```
-
-## Publishing
-
-1. Update the version in `lib/lzstring/version.rb`
-2. Update `CHANGELOG.md` with your changes
-3. Build and push the gem:
-
-```bash
-$ bundle exec rake build
-$ bundle exec rake release
 ```
 
 ## License
