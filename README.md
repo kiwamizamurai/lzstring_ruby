@@ -1,7 +1,7 @@
 # LZString Ruby
 
 [![Gem Version](https://badge.fury.io/rb/lzstring.svg)](https://badge.fury.io/rb/lzstring)
-[![Build Status](https://github.com/kiwamizamurai/lzstring-ruby/workflows/Ruby/badge.svg)](https://github.com/kiwamizamurai/lzstring-ruby/actions)
+[![Build Status](https://github.com/kiwamizamurai/lzstring_ruby/workflows/Ruby/badge.svg)](https://github.com/kiwamizamurai/lzstring-ruby/actions)
 [![Coverage Status](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/kiwamizamurai/lzstring-ruby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
