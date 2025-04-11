@@ -1,7 +1,7 @@
 require_relative "lib/lzstring/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "lzstring"
+  spec.name          = "lzstring-ruby"
   spec.version       = LZString::VERSION
   spec.authors       = ["kiwamizamurai"]
   spec.email         = [""]
