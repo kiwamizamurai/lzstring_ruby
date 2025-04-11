@@ -7,7 +7,8 @@ Gem::Specification.new do |spec|
   spec.email         = [""]
 
   spec.summary       = "Ruby implementation of lz-string, a string compression algorithm"
-  spec.description   = "A Ruby port of lz-string - a string compression algorithm with support for multiple encodings (base64, URI, UTF16)"
+  spec.description   = "A Ruby port of lz-string - a string compression algorithm with support" \
+                       "for multiple encodings (base64, URI, UTF16)"
   spec.homepage      = "https://github.com/kiwamizamurai/lzstring_ruby"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
