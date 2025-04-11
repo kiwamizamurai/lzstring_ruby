@@ -1,6 +1,8 @@
 # LZString Ruby
 
-[![Gem Version](https://badge.fury.io/rb/lzstring-ruby.svg)](https://badge.fury.io/rb/lzstring-ruby)
+![Gem Version](https://img.shields.io/gem/v/lzstring-ruby)
+![Gem Total Downloads](https://img.shields.io/gem/dt/lzstring-ruby)
+![Gem download rank](https://img.shields.io/gem/rd/lzstring-ruby)
 [![Ruby](https://github.com/kiwamizamurai/lzstring_ruby/actions/workflows/main.yml/badge.svg)](https://github.com/kiwamizamurai/lzstring_ruby/actions/workflows/main.yml)
 [![Coverage Status](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/kiwamizamurai/lzstring-ruby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -12,7 +14,7 @@ A Ruby port of lz-string - a string compression algorithm with support for multi
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lzstring'
+gem 'lzstring-ruby'
 ```
 
 And then execute:
@@ -24,7 +26,7 @@ $ bundle install
 Or install it directly:
 
 ```bash
-$ gem install lzstring
+$ gem install lzstring-ruby
 ```
 
 ## Usage
