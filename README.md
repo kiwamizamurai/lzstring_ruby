@@ -9,6 +9,8 @@
 
 A Ruby port of lz-string - a string compression algorithm with support for multiple encodings (base64, URI, UTF16) and seamless JavaScript interoperability
 
+https://www.ruby-toolbox.com/projects/lzstring-ruby
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -128,17 +130,6 @@ Ruby handles character encoding differently from JavaScript. This implementation
 
 The implementation supports basic Unicode characters and includes robust error handling for edge cases. Due to differences in how Ruby and JavaScript handle character encodings, some complex Unicode characters might not compress/decompress perfectly.
 
-### Error Handling
-
-When decompression fails:
-- This library returns `nil` for invalid inputs, similar to the JavaScript version
-- For partial or corrupted compression data, the result will be `nil` rather than a partial string
-- The implementation includes thorough error handling to prevent crashes
-
-### Performance Considerations
-
-The Ruby implementation is a direct port of the JavaScript algorithm and optimized for correctness rather than performance. For very large strings (> 1MB), performance may be noticeably slower than the JavaScript version.
-
 ## Compatibility
 
 This gem is designed to be compatible with the original JavaScript [lz-string](https://github.com/pieroxy/lz-string) library. It can decompress data compressed by the JavaScript library and vice versa.
@@ -155,31 +146,6 @@ const compressed = LZString.compressToBase64('Hello, world!');
 # Ruby
 original = LZString.decompress_from_base64(compressed_from_js)
 puts original # => "Hello, world!"
-```
-
-## Implementation Details
-
-This Ruby implementation follows the same LZ-based compression algorithm as the original JavaScript library. Key features:
-
-- Efficient string compression algorithm
-- Multiple encoding formats (raw, base64, URI component, UTF16, Uint8Array)
-- Custom dictionary support
-- Unicode character support
-- Robust error handling
-
-### Test Status
-
-All tests are now passing! The library includes comprehensive tests for:
-- Basic compression/decompression
-- Various encoding formats (Base64, URI, UTF16, Uint8Array)
-- Unicode character support
-- Edge cases (large strings, repeated patterns, binary data)
-- Error handling
-
-You can run the tests with:
-
-```bash
-$ bundle exec rake test
 ```
 
 ## Development
@@ -204,14 +170,3 @@ $ bundle exec rake quality
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Related Projects
-
-This gem is a Ruby port of the JavaScript [lz-string](https://github.com/pieroxy/lz-string) library by Pieroxy.
-
-Other language ports:
-- **Java:** [lzstring4j](https://github.com/rufushuang/lz-string4java)
-- **Python:** [lz-string-python](https://github.com/eduardtomasek/lz-string-python)
-- **C#:** [lz-string-csharp](https://github.com/kreudom/lz-string-csharp)
-- **PHP:** [lz-string-php](https://github.com/nullpunkt/lz-string-php)
-- **Go:** [go-lz-string](https://github.com/daku10/go-lz-string)
